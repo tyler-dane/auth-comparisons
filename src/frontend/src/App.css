@@ -12,14 +12,14 @@ header {
   margin-bottom: 30px;
 }
 
-.container{
+.container {
   display: flex;
   justify-content: space-between;
 }
 
 .column {
   align-items: center;
-  background-color:#5b6068;
+  background-color: #5b6068;
   border-radius: 5px;
   flex: 1;
   display: flex;
