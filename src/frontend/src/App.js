@@ -1,7 +1,5 @@
 import "./App.css";
-
-import { StytchProvider } from "@stytch/react";
-import { StytchUIClient } from "@stytch/vanilla-js";
+import Stytch from "./stytch/Stytch";
 
 function App() {
   return (
@@ -23,19 +21,9 @@ function App() {
       </header>
 
       <div className="container">
-        <div class="column column-header">
-          <a
-            className="link"
-            href="https://stytch.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Stytch 🪡
-          </a>
-          <button>create session</button>
-        </div>
+        <Stytch />
 
-        <div class="column column-header">
+        <div className="column column-header">
           <a
             className="link"
             href="https://supertokens.com/"

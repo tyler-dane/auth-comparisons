@@ -10,11 +10,12 @@
     "backend"
   ],
   "scripts": {
-    "start": "node backend/app.js",
-    "dev": "concurrently \"node backend/app.js\" \"cd frontend && react-scripts start\"",
-    "build": "yarn --cwd frontend build"
+    "start": "concurrently \"node backend/app.js\" \"yarn start-frontend\"",
+    "start-backend": "node backend/app.js",
+    "start-frontend": "cd frontend && react-scripts start"
   },
   "devDependencies": {
-    "concurrently": "^8.2.0"
+    "concurrently": "^8.2.0",
+    "prettier": "2.8.8"
   }
 }
