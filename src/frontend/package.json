@@ -12,6 +12,8 @@
     "react-modal": "^3.16.1",
     "react-scripts": "5.0.1",
     "stytch": "^7.1.1",
+    "supertokens-auth-react": "^0.33.1",
+    "supertokens-web-js": "^0.6.0",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {

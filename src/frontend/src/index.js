@@ -5,6 +5,7 @@ import { StytchUIClient } from "@stytch/vanilla-js";
 import App from "./App";
 import "./index.css";
 
+  
 const stytch = new StytchUIClient(process.env.REACT_APP_STYTCH_PUBLIC_TOKEN);
 
 const root = document.getElementById("root");

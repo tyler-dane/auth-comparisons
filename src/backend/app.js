@@ -1,7 +1,15 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const stytch = require("stytch");
 const bodyParser = require("body-parser");
+const Session = require("supertokens-node/recipe/session");
+const supertokens = require("supertokens-node");
+const {
+  verifySession,
+} = require("supertokens-node/recipe/session/framework/express");
+const { middleware } = require("supertokens-node/framework/express");
+const { errorHandler } = require("supertokens-node/framework/express");
 
 const PORT = 4000;
 
@@ -11,8 +19,32 @@ const stytchClient = new stytch.Client({
   env: stytch.envs.test,
 });
 
+supertokens.init({
+  framework: "express",
+  supertokens: {
+    connectionURI: process.env["SUPERTOKENS_URI"],
+    apiKey: process.env["SUPERTOKENS_API_KEY"],
+  },
+  appInfo: {
+    appName: "Comparison",
+    apiDomain: `http://localhost:${PORT}`,
+    websiteDomain: "http://localhost:3000",
+    apiBasePath: "/api/supertokens",
+    websiteBasePath: "/",
+  },
+  recipeList: [Session.init()],
+});
+
 const app = express();
+app.use(middleware());
 app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
+    credentials: true,
+  })
+);
 
 app.get("/api/stytch/authenticate", async function (req, res) {
   const token = req.query.token;
@@ -47,5 +79,36 @@ app.post("/api/stytch/session-check", async function (req, res) {
     res.send({ status: "error", message: msg });
   }
 });
+
+app.post("/api/supertokens/authenticate", async function (req, res) {
+  const email = req.body.email;
+  if (!email) {
+    res.send({ status: "error", message: "No email provided" });
+  }
+
+  try {
+    await Session.createNewSession(req, res, email);
+
+    res.send({ status: "success", message: "" });
+  } catch (e) {
+    res.send({ status: "error", message: e.message });
+  }
+});
+
+app.get("/api/supertokens/session-check", async function (req, res) {
+  const email = req.query["email"];
+  if (email === undefined) {
+    res.send({ status: "error", message: "No email provided" });
+    return;
+  }
+  try {
+    let sessionHandles = await Session.getAllSessionHandlesForUser(email);
+    res.send({ status: "success", message: sessionHandles });
+  } catch (e) {
+    res.send({ status: "error", message: e.message });
+  }
+});
+
+app.use(errorHandler());
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

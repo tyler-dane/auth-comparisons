@@ -8,7 +8,11 @@ body {
 }
 
 button {
-  border-radius: 2px;
+  border-radius: 6px;
+  font-weight: bold;
+  padding: 6px;
+  margin: 10px;
+  font-size: 15px;
 }
 
 header {
@@ -23,12 +27,12 @@ pre {
 .button-stytch {
   background-color: #19303d;
   color: #f3f5f6;
-  padding: 6px;
-  margin: 10px;
+
 }
 
 .button-supertokens {
-  background-color: grey;
+  background-color: #f7e4d7;
+
 }
 
 .container {
