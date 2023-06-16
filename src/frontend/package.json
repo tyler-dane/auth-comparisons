@@ -2,6 +2,7 @@
   "name": "@auth-comparisons/frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:4000",
   "dependencies": {
     "@stytch/react": "^4.0.0",
     "@stytch/vanilla-js": "^0.14.4",

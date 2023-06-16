@@ -1,17 +1,18 @@
+require("dotenv").config();
 const express = require("express");
 const stytch = require("stytch");
+const bodyParser = require("body-parser");
 
 const PORT = 4000;
-const STYTCH_PROJECT_ID = "project-test-d2f1576f-8019-4208-a261-1c1f1306258d";
-const STYTCH_SECRET = "secret-test-77py-dm7QD54fSUyq1BlUW9QYGiD0r41H6U=";
 
 const stytchClient = new stytch.Client({
-  project_id: STYTCH_PROJECT_ID,
-  secret: STYTCH_SECRET,
+  project_id: process.env["STYTCH_PROJECT_ID"],
+  secret: process.env["STYTCH_SECRET"],
   env: stytch.envs.test,
 });
 
 const app = express();
+app.use(bodyParser.json());
 
 app.get("/api/stytch/authenticate", async function (req, res) {
   const token = req.query.token;
@@ -20,22 +21,31 @@ app.get("/api/stytch/authenticate", async function (req, res) {
   }
 
   try {
-    const result = await stytchClient.magicLinks.authenticate(token);
-    res.send({ status: "success", result });
+    const result = await stytchClient.magicLinks.authenticate(token, {
+      session_duration_minutes: 20,
+    });
+    res.send({ status: "success", message: result });
   } catch (e) {
     res.send({ status: "error", message: e.message });
   }
 });
 
-app.get("/api/stytch/session-check", async function (req, res) {
- const f = 1 
- console.log(req.session)
-})
+app.post("/api/stytch/session-check", async function (req, res) {
+  const sessionData = req.body;
 
+  if (!sessionData) {
+    res.send({ status: "error", message: "No session token provided" });
+  }
 
-// app.get("/", function (req, res) {
-//   res.sendFile(path.join(__dirname, "../frontend/public/index.html"));
-// });
-// app.use(express.static(path.join(__dirname, "../frontend/public")));
+  try {
+    const result = await stytchClient.sessions.authenticate(sessionData);
+    res.send({ status: "success", message: result });
+  } catch (e) {
+    const msg = JSON.parse(
+      e.message || { error_message: "unknown", payload: e }
+    );
+    res.send({ status: "error", message: msg });
+  }
+});
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

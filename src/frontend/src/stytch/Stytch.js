@@ -1,4 +1,4 @@
-import React, { useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
 import Modal from "react-modal";
 import { useStytch, useStytchSession } from "@stytch/react";
@@ -14,26 +14,28 @@ const buttonText = {
 function Stytch() {
   const emailRef = useRef();
 
-  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const [state, setState] = useState("starting");
 
   const stytch = useStytch();
   const { session } = useStytchSession();
-  session && console.log(session)
-
+  session && alert("found session!");
 
   const BACKEND_PORT = 4000;
-  const STYTCH_API = `http://localhost:${BACKEND_PORT}/api/stytch`
+  const STYTCH_API = `http://localhost:${BACKEND_PORT}/api/stytch`;
   const MAGIC_LINK_URL = `${STYTCH_API}/authenticate`;
 
   const openModal = () => {
-    setIsEmailModalOpen(true);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsEmailModalOpen(false);
+    setIsModalOpen(false);
+    setEmail("");
+    setError(null);
+    setState("starting");
   };
 
   const handleSubmit = async (e) => {
@@ -49,14 +51,9 @@ function Stytch() {
         }
       );
       if (loginRes.status_code === 200) {
-        const readyToCheckStatus = window.confirm("Click the link in your email. Then come back and click OK to check your login status")
-        if (!readyToCheckStatus) {
-          alert("Cancelled, try again");
-        }
-        alert('Checking session status...')
-        const sessionResult = await axios.get(`${STYTCH_API}/session-check`, loginRes)
-        console.log(sessionResult)
-        //request to backend
+        alert(
+          "Email sent! Click the link in the email to finish logging in and see your auth info"
+        );
       }
 
       console.log(loginRes);
@@ -67,6 +64,22 @@ function Stytch() {
       closeModal();
     } catch (e) {
       setError(e);
+    }
+  };
+
+  const checkSession = async () => {
+    const sessionToken = window.prompt(
+      "Copy the session_token value from the payload of the magic link and paste it here"
+    );
+    const sessionStatus = await axios.post(`/api/stytch/session-check`, {
+      session_token: sessionToken,
+      session_duration_minutes: 20,
+    });
+    console.log("session details:\n", sessionStatus.data);
+    if (sessionStatus.data.status === "success") {
+      alert("🥳 Session is active - yay! See console for details");
+    } else {
+      alert("😳 Session is NOT active, see console for details");
     }
   };
 
@@ -81,11 +94,16 @@ function Stytch() {
         Stytch 🪡
       </a>
 
-      <button onClick={openModal}>create session</button>
+      <button className="button-stytch" onClick={openModal}>
+        1. Start auth (magic link)
+      </button>
+      <button className="button-stytch" onClick={checkSession}>
+        2. Check session
+      </button>
 
       <Modal
         ariaHideApp={false}
-        isOpen={isEmailModalOpen}
+        isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="Modal"
         style={{
@@ -125,10 +143,15 @@ function Stytch() {
                   ref={emailRef}
                 />
               </div>
-              <button disabled={state !== "starting"} type="submit">
+              <button
+                className="button-stytch"
+                disabled={state !== "starting"}
+                type="submit"
+              >
                 {buttonText[state]}
               </button>
               <button
+                className="button-stytch"
                 onClick={() => {
                   setState("starting");
                   closeModal();

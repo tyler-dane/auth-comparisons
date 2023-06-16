@@ -7,6 +7,10 @@ body {
   text-align: center;
 }
 
+button {
+  border-radius: 2px;
+}
+
 header {
   align-items: center;
   margin-bottom: 30px;
@@ -14,6 +18,17 @@ header {
 
 pre {
   white-space: pre-wrap;
+}
+
+.button-stytch {
+  background-color: #19303d;
+  color: #f3f5f6;
+  padding: 6px;
+  margin: 10px;
+}
+
+.button-supertokens {
+  background-color: grey;
 }
 
 .container {

@@ -1,4 +1,4 @@
-import React  from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
