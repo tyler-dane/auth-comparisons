@@ -5,6 +5,7 @@
   "author": "Tyler Dane",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^16.1.4",
     "express": "^4.18.2"
   }
 }
