@@ -1,5 +1,20 @@
+import SuperTokens from 'supertokens-auth-react';
+import Session from "supertokens-auth-react/recipe/session";
+import SuperTokensDemo from "./supertokens/SupertokensDemo";
+import StytchDemo from "./stytch/StytchDemo";
 import "./App.css";
-import Stytch from "./stytch/Stytch";
+
+SuperTokens.init({
+  appInfo: {
+    apiDomain: "http://localhost:4000",
+    apiBasePath: "/api/supertokens",
+    appName: "Auth Comparisons",
+    websiteDomain: "http://localhost:3000",
+    },
+    recipeList: [
+      Session.init(),
+    ],
+  });
 
 function App() {
   return (
@@ -21,18 +36,8 @@ function App() {
       </header>
 
       <div className="container">
-        <Stytch />
-
-        <div className="column column-header">
-          <a
-            className="link"
-            href="https://supertokens.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Supertokens 🦸‍♀️
-          </a>
-        </div>
+        <StytchDemo />
+        <SuperTokensDemo />
       </div>
     </div>
   );

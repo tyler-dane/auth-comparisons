@@ -11,7 +11,7 @@ const buttonText = {
   done: "Sent!",
 };
 
-function Stytch() {
+function StytchDemo() {
   const emailRef = useRef();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,7 +75,7 @@ function Stytch() {
       session_token: sessionToken,
       session_duration_minutes: 20,
     });
-    console.log("session details:\n", sessionStatus.data);
+    console.log("Stytch session details:\n", sessionStatus.data);
     if (sessionStatus.data.status === "success") {
       alert("🥳 Session is active - yay! See console for details");
     } else {
@@ -167,4 +167,4 @@ function Stytch() {
   );
 }
 
-export default Stytch;
+export default StytchDemo;
