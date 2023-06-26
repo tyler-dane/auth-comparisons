@@ -1,18 +1,29 @@
+html {
+  height: 100%;
+}
 body {
   align-items: center;
+  background: linear-gradient(#1e2126, #2c3242, #2b3447);
   display: flex;
-  background-color: #282c34;
   color: white;
   flex-direction: column;
+  height: 100%;
   text-align: center;
 }
 
 button {
   border-radius: 6px;
   font-weight: bold;
-  padding: 6px;
-  margin: 10px;
   font-size: 15px;
+  margin: 10px;
+  padding: 6px;
+
+  &:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    filter: brightness(1.2);
+    transition: filter 0.3s ease;
+  }
 }
 
 header {
@@ -27,12 +38,10 @@ pre {
 .button-stytch {
   background-color: #19303d;
   color: #f3f5f6;
-
 }
 
 .button-supertokens {
   background-color: #f7e4d7;
-
 }
 
 .container {

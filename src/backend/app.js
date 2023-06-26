@@ -1,13 +1,11 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
-const cors = require("cors");
 const stytch = require("stytch");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const Session = require("supertokens-node/recipe/session");
 const supertokens = require("supertokens-node");
-const {
-  verifySession,
-} = require("supertokens-node/recipe/session/framework/express");
 const { middleware } = require("supertokens-node/framework/express");
 const { errorHandler } = require("supertokens-node/framework/express");
 
@@ -45,6 +43,8 @@ app.use(
     credentials: true,
   })
 );
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/views"); // Optional: Specify the views directory
 
 app.get("/api/stytch/authenticate", async function (req, res) {
   const token = req.query.token;
@@ -56,7 +56,13 @@ app.get("/api/stytch/authenticate", async function (req, res) {
     const result = await stytchClient.magicLinks.authenticate(token, {
       session_duration_minutes: 20,
     });
-    res.send({ status: "success", message: result });
+
+    const data = {
+      session_token: result.session_token,
+      session_metadata: result,
+    };
+
+    res.render("stytchSuccess", data);
   } catch (e) {
     res.send({ status: "error", message: e.message });
   }

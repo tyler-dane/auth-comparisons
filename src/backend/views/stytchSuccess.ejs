@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>it worked</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"
+    />
+    <style>
+      .code-block {
+        background-color: #cbc7c7;
+        border-radius: 4px;
+        font-size: 11px;
+        line-height: 0.6;
+        overflow: auto;
+        padding: 1rem;
+        max-width: 100%;
+        white-space: nowrap;
+      }
+
+
+      .code-block pre[class*="language-"] {
+        background-color: rgb(234, 234, 234);
+        line-height: 0.6;
+      }
+
+      #session-token {
+        background-color: #cbc7c7;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>It worked!</h1>
+    <p>You created a Stytch session!</p>
+    <p>Want to double-check?</p>
+    <ol>
+      <li>Copy the below session token</li>
+      <li>Go back to the <a href="http://localhost:3000/" target="_blank">main page</a></li>
+      <li>The 'Check session' button in the Stytch column</li>
+      <li>Paste the token</li>
+    </ol>
+    <h2>Session token (copy) 👇: 
+    <div><h3 id="session-token"><%= session_token %><h3></div>
+    
+    <h2>Session metadata:</h2>
+    <div class="code-block">
+      <pre><code class="language-javascript">
+        <% function displayObject(obj) { %>
+          <% if (obj && typeof obj === 'object') { %>
+            <% Object.entries(obj).forEach(([key, value]) => { %>
+              <%= key %>: <%= JSON.stringify(value) %>
+              <% if (typeof value === 'object') { %>
+                <% displayObject(value); %>
+              <% } %>
+            <% }); %>
+          <% } %>
+        <% } %>
+        <% displayObject(session_metadata); %>
+      </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+  </body>
+</html>
